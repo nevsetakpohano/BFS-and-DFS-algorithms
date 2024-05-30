@@ -15,6 +15,7 @@ body {
 
 .controls {
     margin: 20px;
+    display: flex;
     flex-direction: column;
 
 }
@@ -28,3 +29,10 @@ button {
     background-color: #DAB785;
 
 }
+ 
+button:hover {
+    background-color: #0C8346;
+    transition: all 0.5s;
+    color: #f7f2ea;
+}
+
