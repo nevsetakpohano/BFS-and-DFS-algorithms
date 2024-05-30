@@ -2,6 +2,7 @@ const canvasNeNapr = document.getElementById("neNapr");
 const canvasNapr = document.getElementById("napr");
 const contextNeNapr = canvasNeNapr.getContext("2d");
 const contextNapr = canvasNapr.getContext("2d");
+
 const qntnNodes = 10;
 const coef = 1 - 0 * 0.02 - 1 * 0.005 - 0.25;
 const radius = 15;
@@ -17,6 +18,7 @@ const nodePositions = [
   { x: 200, y: 450 }, //9
   { x: 120, y: 350 }, //10
 ];
+
 function generateAdjacencyMatrixSymmetrical() {
   const seed = 3301;
   let matrix = [];
@@ -37,6 +39,7 @@ function generateAdjacencyMatrixSymmetrical() {
   }
   return matrix;
 }
+
 function generateAdjacencyMatrixNotSymmetrical() {
   const seed = 3301;
   let matrix = [];
@@ -50,7 +53,8 @@ function generateAdjacencyMatrixNotSymmetrical() {
   }
   return matrix;
 }
-function drawNodes(context) {
+
+function drawAllNodes(context) {
   nodePositions.forEach((position, index) => {
     context.fillStyle = "#DAB785";
     context.beginPath();
@@ -64,8 +68,37 @@ function drawNodes(context) {
     context.fillText(`${index + 1}`, position.x, position.y);
   });
 }
-const drawArrow = (x, y, context, angle) => {
-  const arrowSize = 4;
+
+function drawNode(index, context, colour) {
+  context.fillStyle = colour;
+  context.strokeStyle = "black";
+  context.lineWidth = 2;
+
+  context.beginPath();
+  context.arc(
+    nodePositions[index].x,
+    nodePositions[index].y,
+    radius,
+    0,
+    Math.PI * 2,
+    true
+  );
+  context.fill();
+  context.stroke();
+  context.font = "14px Times New Roman";
+  context.fillStyle = "black";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText(
+    `${index + 1}`,
+    nodePositions[index].x,
+    nodePositions[index].y
+  );
+}
+
+const drawArrow = (x, y, context, angle, size) => {
+  const arrowSize = size;
+
   context.save();
   context.translate(x, y);
   context.rotate(angle);
@@ -76,9 +109,17 @@ const drawArrow = (x, y, context, angle) => {
   context.closePath();
   context.restore();
 };
-function drawEdges(matrix, context, napr) {
-  context.strokeStyle = "rgba(0, 0, 0, 1)";
-  context.lineWidth = 2;
+
+function drawLine(startX, startY, endX, endY, context, colour, lineWidth) {
+  context.strokeStyle = colour;
+  context.lineWidth = lineWidth;
+  context.beginPath();
+  context.moveTo(startX, startY);
+  context.lineTo(endX, endY);
+  context.stroke();
+}
+
+function drawEdges(matrix, context) {
   for (let i = 0; i < qntnNodes; i++) {
     for (let j = 0; j < qntnNodes; j++) {
       if (matrix[i][j] === 1) {
@@ -86,15 +127,14 @@ function drawEdges(matrix, context, napr) {
         const startY = nodePositions[j].y;
         const endX = nodePositions[i].x;
         const endY = nodePositions[i].y;
-        context.beginPath();
-        context.moveTo(startX, startY);
-        context.lineTo(endX, endY);
-        context.stroke();
+
+        drawLine(startX, startY, endX, endY, context, "black", 2);
+
         if (context === contextNapr) {
           const angle = Math.atan2(endY - startY, endX - startX);
           const indentX = radius * Math.cos(angle);
           const indentY = radius * Math.sin(angle);
-          drawArrow(startX + indentX, startY + indentY, context, angle);
+          drawArrow(startX + indentX, startY + indentY, context, angle, 4);
         }
         if (i === j) {
           context.beginPath();
@@ -112,7 +152,8 @@ function drawEdges(matrix, context, napr) {
                 nodePositions[i].x + 5,
                 nodePositions[i].y - 15,
                 context,
-                -Math.PI / 4
+                -Math.PI / 4,
+                4
               );
             }
             context.stroke();
@@ -130,7 +171,8 @@ function drawEdges(matrix, context, napr) {
                 nodePositions[i].x + 5,
                 nodePositions[i].y + 15,
                 context,
-                Math.PI / 4
+                Math.PI / 4,
+                4
               );
             }
             context.stroke();
@@ -149,5 +191,59 @@ console.log(matrixNotSymmetrical);
 drawEdges(matrixNotSymmetrical, contextNapr);
 drawEdges(matrixSymmetrical, contextNeNapr);
 
-drawNodes(contextNeNapr);
-drawNodes(contextNapr);
+drawAllNodes(contextNeNapr);
+drawAllNodes(contextNapr);
+
+/////////////////////////////////////////////////////////////////
+const bfsButton = document.getElementById("bfsButton");
+
+let visitedNodes = new Array(qntnNodes).fill(false);
+let bfsStatus = false;
+let queue = [];
+const startNode = 0;
+queue.push(startNode);
+let checker = (array) => array.every(Boolean);
+
+function bfsStep(matrix, context) {
+  bfsStatus = true;
+  let current = queue.shift();
+  if (checker(visitedNodes)) {
+    alert("BFS opened all nodes");
+    bfsStatus = false;
+    return;
+  }
+  for (let i = 0; i < 10; i++) {
+    if (
+      matrix[current][i] === 1 &&
+      !visitedNodes[current] &&
+      !visitedNodes[i] &&
+      current != i &&
+      !queue.includes(i)
+    ) {
+      const startX = nodePositions[current].x;
+      const startY = nodePositions[current].y;
+      const endX = nodePositions[i].x;
+      const endY = nodePositions[i].y;
+      drawLine(startX, startY, endX, endY, context, "#0C8346", 4);
+
+      const angle = Math.atan2(startY - endY, startX - endX);
+      const indentX = radius * Math.cos(angle);
+      const indentY = radius * Math.sin(angle);
+      context.beginPath();
+      drawArrow(endX + indentX, endY + indentY, context, angle, 6);
+      context.stroke();
+
+      queue.push(i);
+      drawNode(i, contextNapr, "#05F140");
+      console.log(current + 1 + " -> " + (i + 1));
+    }
+  }
+  visitedNodes[current] = true;
+  drawNode(current, contextNapr, "#0C8346");
+}
+
+bfsButton.addEventListener("click", () => {
+  bfsStep(matrixNotSymmetrical, contextNapr);
+});
+
+////////////////////////////////////////////////////
