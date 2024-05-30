@@ -128,7 +128,7 @@ function drawEdges(matrix, context, napr) {
             if (context === contextNapr) {
               drawArrow(
                 nodePositions[i].x + 5,
-                nodePositions[i].y - 15,
+                nodePositions[i].y + 15,
                 context,
                 Math.PI / 4
               );
