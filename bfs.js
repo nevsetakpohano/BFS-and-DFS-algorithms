@@ -10,7 +10,7 @@ function bfsStep(matrix, context) {
   let current = queue.shift();
   if (checker(visitedNodes)) {
     alert("BFS opened all nodes");
-    drawAllNodes(contextNapr, "#19673f", "white");
+    drawAllNodes(contextNapr, "#1f7d4c", "white");
     return;
   }
   for (let i = 0; i < 10; i++) {
