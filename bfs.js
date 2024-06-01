@@ -1,5 +1,9 @@
 const bfsButton = document.getElementById("bfsButton");
 
+let matrixTreeBFS = Array.from({ length: qntnNodes }, () =>
+  Array(qntnNodes).fill(0)
+);
+
 let visitedNodes = new Array(qntnNodes).fill(false);
 let queue = [];
 const startNode = 0;
@@ -10,7 +14,8 @@ function bfsStep(matrix, context) {
   let current = queue.shift();
   if (checker(visitedNodes)) {
     alert("BFS opened all nodes");
-    drawAllNodes(contextNapr, "#1f7d4c", "white");
+    drawAllNodes(context, "#1f7d4c", "white");
+    console.log(matrixTreeBFS);
     return;
   }
   for (let i = 0; i < 10; i++) {
@@ -33,7 +38,7 @@ function bfsStep(matrix, context) {
       context.beginPath();
       drawArrow(endX + indentX, endY + indentY, context, angle, 6);
       context.stroke();
-
+      matrixTreeBFS[current][i] = 1;
       queue.push(i);
       drawNode(i, context, "#05F140", "black");
       console.log(current + 1 + " -> " + (i + 1));

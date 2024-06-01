@@ -1,15 +1,20 @@
 const dfsButton = document.getElementById("dfsButton");
 
+let matrixTreeDFS = Array.from({ length: qntnNodes }, () =>
+  Array(qntnNodes).fill(0)
+);
+
 let visitedNodesDFS = new Array(qntnNodes).fill(false);
 
 async function dfsStep(matrix, context, current = 0) {
   if (checker(visitedNodesDFS)) {
     alert("DFS opened all nodes");
-    drawAllNodes(contextNapr, "#931f1f", "white");
+    drawAllNodes(context, "#931f1f", "white");
+    console.log(matrixTreeDFS);
     return;
   }
   visitedNodesDFS[current] = true;
-  drawNode(current, contextNapr, "#931f1f", "white");
+  drawNode(current, context, "#931f1f", "white");
 
   for (let i = 0; i < qntnNodes; i++) {
     if (matrix[current][i] === 1 && !visitedNodesDFS[i]) {
@@ -26,10 +31,12 @@ async function dfsStep(matrix, context, current = 0) {
       drawArrow(endX + indentX, endY + indentY, context, angle, 6);
       context.stroke();
 
-      drawNode(i, contextNapr, "#f10505", "white");
+      matrixTreeDFS[current][i] = 1;
+
+      drawNode(i, context, "#f10505", "white");
       console.log(current + 1 + " -> " + (i + 1));
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       await dfsStep(matrix, context, i);
     }
