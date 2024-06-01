@@ -1,17 +1,15 @@
 const dfsButton = document.getElementById("dfsButton");
 
-let dfsStatus = false;
 let visitedNodesDFS = new Array(qntnNodes).fill(false);
 
 async function dfsStep(matrix, context, current = 0) {
-  dfsStatus = true;
   if (checker(visitedNodesDFS)) {
-    alert("DFS открыл все узлы");
-    dfsStatus = false;
+    alert("DFS opened all nodes");
+    drawAllNodes(contextNapr, "#931f1f", "white");
     return;
   }
   visitedNodesDFS[current] = true;
-  drawNode(current, contextNapr, "#830c0c", "white");
+  drawNode(current, contextNapr, "#931f1f", "white");
 
   for (let i = 0; i < qntnNodes; i++) {
     if (matrix[current][i] === 1 && !visitedNodesDFS[i]) {
@@ -19,7 +17,7 @@ async function dfsStep(matrix, context, current = 0) {
       const startY = nodePositions[current].y;
       const endX = nodePositions[i].x;
       const endY = nodePositions[i].y;
-      drawLine(startX, startY, endX, endY, context, "#830c0c", 4);
+      drawLine(startX, startY, endX, endY, context, "#931f1f", 4);
 
       const angle = Math.atan2(startY - endY, startX - endX);
       const indentX = radius * Math.cos(angle);

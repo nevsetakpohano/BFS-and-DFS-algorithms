@@ -4,7 +4,7 @@ const contextNeNapr = canvasNeNapr.getContext("2d");
 const contextNapr = canvasNapr.getContext("2d");
 
 const qntnNodes = 10;
-const coef = 1 - 0 * 0.02 - 1 * 0.005 - 0.25;
+const coef = 1.0 - 0 * 0.01 - 1 * 0.005 - 0.15;
 const radius = 15;
 const nodePositions = [
   { x: 120, y: 250 }, //1

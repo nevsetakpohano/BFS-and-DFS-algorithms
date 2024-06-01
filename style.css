@@ -35,14 +35,14 @@ button {
 }
  
 .bfsButton:hover {
-    background-color: #0a562f;
+    background-color: #1f7d4c;
     transition: all 0.5s;
     color: #f7f2ea;
     cursor: pointer;
 }
  
 .dfsButton:hover {
-    background-color: #830c0c;
+    background-color: #931f1f;
     transition: all 0.5s;
     cursor: pointer;
     color: #f7f2ea;
