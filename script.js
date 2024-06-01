@@ -54,24 +54,23 @@ function generateAdjacencyMatrixNotSymmetrical() {
   return matrix;
 }
 
-function drawAllNodes(context, colour) {
+function drawAllNodes(context, colour, txtColour) {
   nodePositions.forEach((position, index) => {
-    // context.fillStyle = "#DAB785";
     context.fillStyle = colour;
     context.beginPath();
     context.arc(position.x, position.y, radius, 0, Math.PI * 2, true);
     context.fill();
     context.stroke();
     context.font = "14px Times New Roman";
-    context.fillStyle = "black";
+    context.fillStyle = txtColour;
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.fillText(`${index + 1}`, position.x, position.y);
   });
 }
 
-function drawNode(index, context, colour) {
-  context.fillStyle = colour;
+function drawNode(index, context, bgColour, txtColour) {
+  context.fillStyle = bgColour;
   context.strokeStyle = "black";
   context.lineWidth = 2;
 
@@ -87,7 +86,7 @@ function drawNode(index, context, colour) {
   context.fill();
   context.stroke();
   context.font = "14px Times New Roman";
-  context.fillStyle = "black";
+  context.fillStyle = txtColour;
   context.textAlign = "center";
   context.textBaseline = "middle";
   context.fillText(
@@ -192,11 +191,5 @@ console.log(matrixNotSymmetrical);
 drawEdges(matrixNotSymmetrical, contextNapr);
 drawEdges(matrixSymmetrical, contextNeNapr);
 
-drawAllNodes(contextNeNapr, "#DAB785");
-drawAllNodes(contextNapr, "#DAB785");
-
-const canvasTree = document.getElementById("tree");
-const contextTree = canvasTree.getContext("2d");
-
-drawEdges(matrixNotSymmetrical, contextTree);
-drawAllNodes(contextTree, "#DAB785");
+drawAllNodes(contextNeNapr, "#DAB785", "black");
+drawAllNodes(contextNapr, "#DAB785", "black");
